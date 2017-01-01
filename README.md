@@ -63,8 +63,8 @@ webserver_t server = ws_create("server_name", NULL, "8080", stderr, options);
 Now you can add you handlers.
 ```c
 handle_t handle = {
-	.host = NULL,		// the host to listen on (NULL means any)
-	.path = "/*.c",		// yes, you can use wildcards (NULL still means any)
+	.host = ANY,		// the hostname to listen on (ANY can be used)
+	.path = "/*.c",		// yes, you can use wildcards (ANY can still be used)
 	.handler = &not_found	// function pointer of the handler
 };
 ws_handle_add(&server, handle);

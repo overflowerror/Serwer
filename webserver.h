@@ -9,6 +9,8 @@
 #define WS_VERSION "0.1"
 #define WS_NAME "SERWER"
 
+
+
 typedef struct header {
 	const char* key;
 	const char* value;
@@ -28,6 +30,8 @@ typedef int loglevel_t;
 #define LOG_VERBOSE 5
 #define LOG_WARN 2
 #define LOG_ERROR 0
+
+#define ANY NULL
 
 typedef enum method {
 	OPTIONS,
