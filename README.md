@@ -7,6 +7,9 @@ Well, it's standalone webserver written entirely in C99 (no libs required).
 ### Why would someone need this?
 I've no idea. But I'm going to use this for my next project.
 
+### Why is it's name to weird?
+Because W for web... Get it? ... Well next time I'll ask you for a catchy name, smartypants.
+
 ### Is this ... thing ... even finished?
 No. There are many functions missing and the code needs some revision (and comments I suppose).
 There is a working mode though (see [the main file](main.c) for an example).
