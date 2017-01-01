@@ -81,3 +81,19 @@ Any questions?
 
 ### ... Oh, you were talking to me?
 -.- 
+
+### Is there something missing?
+Well, where can I start?
+
+- the other modes (LINEAR is working, but it's not useable in practice).
+- SSL/HTTPS support
+- management for cookies and sessions
+- index-handlers
+- cgi-handlers
+
+## Okay, anything else to do?
+Yes:
+
+- extracting the ws_*_run-functions plus their own dependencies to other files (I hate files with more than 1000 lines. D: )
+- comments (Yes I know, I'm lazy on that.)
+- some security features would be nice (timeouts, ...)
