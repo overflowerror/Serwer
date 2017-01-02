@@ -6,7 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-method_t ws_meth(const char* string) {
+method_t ws_method(const char* string) {
 	if 	(strcmp(string, "OPTIONS") == 0)
 		return OPTIONS;
 	else if (strcmp(string, "GET") == 0)
@@ -27,7 +27,7 @@ method_t ws_meth(const char* string) {
 		return -1; // unknown method
 }
 
-const char* ws_strm(method_t method) {
+const char* ws_method_string(method_t method) {
 	switch(method) {
 	case OPTIONS:
 		return "OPTIONS";
@@ -263,7 +263,7 @@ int ws_request_parse(char* buffer, const char** path, method_t* method) {
 			} else {
 				state++;
 				lbuffer[position] = '\0';
-				*method = ws_meth(lbuffer);
+				*method = ws_method(lbuffer);
 				if (*method < 0)
 					return -2; // unknown method
 			}

@@ -3,8 +3,8 @@
 
 #include "ws_types.h"
 
-method_t ws_meth(const char*);
-const char* ws_strm(method_t);
+method_t ws_method(const char*);
+const char* ws_method_string(method_t);
 const char* ws_code_reason(int);
 
 bool ws_host_match(const char*, const char*);

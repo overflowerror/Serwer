@@ -15,7 +15,7 @@ int hello_world(method_t method, const char* host, const char* path, headers_t r
 int test(method_t method, const char* host, const char* path, headers_t requestHeaders, 
 			headers_t* responseHeaders, stream_t request, stream_t response) {
 
-	fprintf(response, "Method: %s, URI: %s%s\n", ws_strm(method), host, path);
+	fprintf(response, "Method: %s, URI: %s%s\n", ws_method_string(method), host, path);
 	fprintf(response, "Request headers:\n");
 	for (int i = 0; i < requestHeaders.nrfields; i++) {
 		header_t header = requestHeaders.fields[i];
