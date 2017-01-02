@@ -8,7 +8,8 @@ Well, it's standalone webserver written entirely in C99 (no libs required).
 I've no idea. But I'm going to use this for my next project.
 
 ### Why is it's name to weird?
-Because W for web... Get it? ... Well next time I'll ask you for a catchy name, smartypants.
+Because W for web... Get it? ... And it's the Polish word for server. 
+Well next time I'll ask you for a catchy name, smartypants.
 
 ### Is this ... thing ... even finished?
 No. There are many functions missing and the code needs some revision (and comments I suppose).
