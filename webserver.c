@@ -25,7 +25,7 @@ bool ws_host_match(const char* host, const char* match) {
 	int wnext = -1;
 	int found = -1;
 
-	int h = 0, m = 0;
+	int h = 0, int = 0;
 	for (; m < lenm && h < lenh; m++, h++) {
 		if (match[m] == '*') {
 			wildcard = true;
@@ -161,7 +161,8 @@ char* ws_host_find(const char** path, headers_t headers) {
 
 	int nrslash = 0;	
 
-	for (int i = 0; i < strlen(*path); i++) {
+	size_t len = strlen(*path);
+	for (size_t i = 0; i < len; i++) {
 		if (nrslash < 2) {
 			// http://
 		} else if (nrslash < 3) {
@@ -217,7 +218,8 @@ int ws_request_parse(char* buffer, const char** path, method_t* method) {
 
 	int state = 0;
 
-	for(int i = 0; i < strlen(buffer); i++) {
+	size_t len = strlen(buffer);
+	for(size_t i = 0; i < len; i++) {
 		switch(state) {
 		case 0:	// method
 			if (buffer[i] != ' ') {
