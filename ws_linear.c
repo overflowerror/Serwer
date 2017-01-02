@@ -138,7 +138,7 @@ int ws_run_linear(webserver_t* server) {
 
 					// send
 					ws_log(server, LOG_TESTING, "sending response");
-					ws_send(connfd, code, responseHeaders, pipefd[0]);
+					size_t response_size = ws_send(connfd, code, responseHeaders, pipefd[0]);
 
 					// cleanup
 					ws_log(server, LOG_DEBUG, "cleanup");
@@ -147,6 +147,11 @@ int ws_run_linear(webserver_t* server) {
 					ws_headers_free(&responseHeaders);
 					
 					ws_log(server, LOG_TESTING, "done");
+
+					if (s == 0)
+						ws_log(server, LOG_MESSAGE, "%s:%s - %s %s @ %s, %i, %i bytes", phost, service, ws_method_string(method), path, host, code, response_size);
+					else
+						ws_log(server, LOG_MESSAGE, "-:- - %s %s @ %s, %i, %i bytes", ws_method_string(method), path, host, code, response_size);
 
 					break;
 				}				

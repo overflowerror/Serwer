@@ -60,8 +60,8 @@ srvoptions_t options = {
 	.loglevel = LOG_DEBUG	// the log level for the logfile
 };
 
-// webserver_t ws_create(const char* name, const char* host (can be NULL for default), const char* port, FILE* logfile, srvoptions_t options);
-webserver_t server = ws_create("server_name", NULL, "8080", stderr, options);
+// webserver_t ws_create(const char* name, const char* host (can be ANY for any), const char* port, FILE* logfile, srvoptions_t options);
+webserver_t server = ws_create("server_name", ANY, "8080", stderr, options);
 ```
 
 Now you can add you handlers.

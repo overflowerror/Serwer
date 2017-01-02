@@ -42,10 +42,10 @@ int main(int argc, char** argv) {
 		.mode = LINEAR,
 		.timeout = 30,
 		.maxconnections = 5,		
-		.loglevel = LOG_DEBUG
+		.loglevel = LOG_WARN
 	};
 
-	webserver_t server = ws_create("test_server", NULL , "8080", stderr, options);
+	webserver_t server = ws_create("test_server", ANY , "8080", stderr, options);
 
 	ws_handle_add(&server, hello_handle);
 	ws_handle_add(&server, test_handle);

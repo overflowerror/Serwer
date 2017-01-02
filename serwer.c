@@ -84,6 +84,7 @@ int ws_listen(webserver_t* server) {
 	int s;
 
 	memset(&hints, 0, sizeof(struct addrinfo));
+	hints.ai_flags = AI_PASSIVE; // host = NULL => IP wildcard; see getaddrinfo(2)
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
 
@@ -164,7 +165,7 @@ void ws_log(webserver_t* server, loglevel_t loglevel, const char* format, ...) {
 	fprintf(server->logfile, "\n");
 }
 
-void ws_send(int connfd, int code, headers_t headers, int pipefd) {
+size_t ws_send(int connfd, int code, headers_t headers, int pipefd) {
 	stream_t connection = (stream_t) fdopen(connfd, "a+");
 
 	setbuf(connection, NULL);
@@ -188,19 +189,25 @@ void ws_send(int connfd, int code, headers_t headers, int pipefd) {
 
 	if (pipefd == -1) {
 		fclose(connection);
-		return;
+		return 0;
 	}
 
 	char buffer[BUFFER_SIZE];
 	int bs = 0;
-	while ((bs = read(pipefd, buffer, BUFFER_SIZE)) > 0)
+	size_t size = 0;
+
+	while ((bs = read(pipefd, buffer, BUFFER_SIZE)) > 0) {
+		size += bs;
 		write(connfd, buffer, bs);
+	}
 	
 	fclose(connection);
+	
+	return size;
 }
 
 void ws_simple_status(int connfd, int code) {
-	ws_send(connfd, code, (headers_t) {
+	(void) ws_send(connfd, code, (headers_t) {
 		.fields = NULL, 
 		.nrfields = 0
 	}, -1);
@@ -208,8 +215,12 @@ void ws_simple_status(int connfd, int code) {
 
 
 int ws_run(webserver_t* server) {
+	ws_log(server, LOG_MESSAGE, "server \"%s\" started on %s:%s", server->name, 
+		server->host == NULL ? "0.0.0.0" : server->host, server->port);
+
 	switch(server->options.mode) {
 	case LINEAR:
+		ws_log(server, LOG_DEBUG, "starting linear handler");
 		return ws_run_linear(server);
 	default:
 		errno = EBADRQC;

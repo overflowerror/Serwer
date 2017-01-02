@@ -17,12 +17,6 @@ typedef FILE* stream_t;
 
 typedef int loglevel_t;
 
-#define LOG_TESTING 11
-#define LOG_DEBUG 10
-#define LOG_VERBOSE 5
-#define LOG_WARN 2
-#define LOG_ERROR 0
-
 #define ANY NULL
 
 typedef enum method {
