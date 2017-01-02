@@ -17,14 +17,14 @@ all: example
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-example: example.o webserver.o help.o
+example: example.o webserver.o ws_linear.o ws_utils.o help.o 
 	$(CC) $(LDFLAGS) -o $@ $^
 
 example.o: example.c webserver.h
-
 help.o: help.c help.h
-
-webserver.o: webserver.c webserver.h help.h
+webserver.o: webserver.c webserver.h ws_types.h ws_modes.h ws_utils.h help.h
+ws_utils.o: ws_utils.c ws_utils.h ws_types.h 
+ws_linear.o: ws_linear.c ws_modes.h ws_types.h webserver.h ws_utils.h
 
 clean: 
 	rm -f *.o example

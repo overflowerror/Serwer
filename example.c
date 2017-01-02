@@ -1,4 +1,5 @@
 #include "webserver.h"
+#include "ws_utils.h"
 #include "help.h"
 #include <stdio.h>
 #include <stdlib.h>
