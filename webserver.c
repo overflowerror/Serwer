@@ -140,7 +140,7 @@ char* ws_host_find(const char** path, headers_t headers) {
 	for (int i = 0; i < headers.nrfields; i++) {
 		header_t header = headers.fields[i];
 		if (strcmp(header.key, "Host") == 0) {
-			host = (char*) malloc(strlen(header.value) + 1);
+			host =  malloc(strlen(header.value) + 1);
 			memcpy(host, header.value, strlen(header.value) + 1);
 			return host;
 		}	
@@ -155,7 +155,7 @@ char* ws_host_find(const char** path, headers_t headers) {
 
 	if (host == NULL) {
 		setHost = true;
-		host = (char*) malloc(strlen(*path) + 1);
+		host = malloc(strlen(*path) + 1);
 	}
 	int hposition = 0;
 
@@ -184,7 +184,7 @@ char* ws_host_find(const char** path, headers_t headers) {
 	}
 	if (setHost) {
 		host[hposition] = '\0';
-		host = (char*) realloc(host, strlen(host) + 1);
+		host = realloc(host, strlen(host) + 1);
 	}
 
 	return host;
@@ -288,13 +288,13 @@ int ws_request_parse(char* buffer, const char** path, method_t* method) {
 
 headers_t ws_headers_create(void) {
 	headers_t headers;
-	headers.fields = (header_t*) malloc(0 * sizeof(header_t));
+	headers.fields = malloc(0 * sizeof(header_t));
 	headers.nrfields = 0;
 	return headers;
 }
 
 void ws_headers_add(headers_t* headers, const char* key, const char* value) {
-	headers->fields = (header_t*) realloc(headers->fields, ++(headers->nrfields) * sizeof(header_t));
+	headers->fields = realloc(headers->fields, ++(headers->nrfields) * sizeof(header_t));
 	headers->fields[headers->nrfields - 1].key = key;
 	headers->fields[headers->nrfields - 1].value = value;
 }
@@ -372,7 +372,7 @@ int ws_listen(webserver_t* server) {
 }
 
 void ws_handle_add(webserver_t* server, handle_t handle) {
-	server->handles = (handle_t*) realloc(server->handles, ++(server->nrhandles) * sizeof(handle_t));
+	server->handles = realloc(server->handles, ++(server->nrhandles) * sizeof(handle_t));
 	server->handles[server->nrhandles - 1] = handle;
 }
 
@@ -383,7 +383,7 @@ webserver_t ws_create(const char* name, const char* host, const char* port, FILE
 	server.port = port;
 	server.logfile = logfile;
 	server.nrhandles = 0;
-	server.handles = (handle_t*) malloc(0);
+	server.handles = malloc(0);
 	server.options.mode = LINEAR;
 	server.options.timeout = 30;
 
@@ -555,11 +555,11 @@ int ws_run_linear(webserver_t* server) {
 	int s;
 	int connfd;
 
-	char* buffer = (char*) malloc(BUFFER_SIZE * sizeof(char));
+	char* buffer = malloc(BUFFER_SIZE * sizeof(char));
 	int buffersize = 0;
 	int nb = 1;
 
-	char* header = (char*) malloc(BUFFER_SIZE * sizeof(char));
+	char* header = malloc(BUFFER_SIZE * sizeof(char));
 	int headersize = 0;
 	int nhb = 1;
 
@@ -595,7 +595,7 @@ int ws_run_linear(webserver_t* server) {
 
 			if (buffersize > nb * BUFFER_SIZE - 1) {
 				nb++;
-				buffer = (char*) realloc(buffer, nb * BUFFER_SIZE * sizeof(char));
+				buffer = realloc(buffer, nb * BUFFER_SIZE * sizeof(char));
 			}
 
 			buffer[buffersize] = '\0';
@@ -693,7 +693,7 @@ int ws_run_linear(webserver_t* server) {
 				ws_log(server, LOG_TESTING, "enlarging header buffer");
 				while (headersize + buffersize + 1 > nhb * BUFFER_SIZE) {
 					nhb++;
-					header = (char*) realloc(header, nhb * BUFFER_SIZE * sizeof(char));
+					header = realloc(header, nhb * BUFFER_SIZE * sizeof(char));
 				}
 
 				memcpy(header + headersize, buffer, buffersize + 1);
@@ -720,13 +720,13 @@ int ws_run_linear(webserver_t* server) {
 				headersize += buffersize + 1;
 
 				ws_log(server, LOG_TESTING, "reset buffer");
-				buffer = (char*) realloc(buffer, BUFFER_SIZE * sizeof(char));
+				buffer = realloc(buffer, BUFFER_SIZE * sizeof(char));
 				nb = 1;
 				buffersize = 0;
 			}
 		}
 
-		header = (char*) realloc(header, BUFFER_SIZE * sizeof(char));
+		header = realloc(header, BUFFER_SIZE * sizeof(char));
 		nhb = 1;
 		headersize = 0;
 
@@ -738,7 +738,7 @@ int ws_run_linear(webserver_t* server) {
 			free(host);
 		host = NULL;		
 
-		buffer = (char*) realloc(buffer, BUFFER_SIZE * sizeof(char));
+		buffer = realloc(buffer, BUFFER_SIZE * sizeof(char));
 		nb = 1;
 		buffersize = 0;
 	}
