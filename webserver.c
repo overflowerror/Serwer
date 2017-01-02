@@ -734,9 +734,10 @@ int ws_run_linear(webserver_t* server) {
 
 		ws_headers_free(&headers);	
 		
-		if (host != NULL)
+		if (host != NULL) {
 			free(host);
-		host = NULL;		
+			host = NULL;		
+		}
 
 		buffer = realloc(buffer, BUFFER_SIZE * sizeof(char));
 		nb = 1;
