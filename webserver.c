@@ -208,7 +208,8 @@ const char* ws_strm(method_t method) {
 		return "TRACE";
 	case CONNECT:
 		return "CONNECT";
-
+	default:
+		return "unknown method";
 	}
 }
 
