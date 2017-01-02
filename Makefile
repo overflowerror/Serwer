@@ -17,14 +17,14 @@ all: test
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-test: main.o webserver.o help.o
+exmaple: exmaple.o webserver.o help.o
 	$(CC) $(LDFLAGS) -o $@ $^
 
-main.o: main.c webserver.h
+exmaple.o: exmaple.c webserver.h
 
 help.o: help.c help.h
 
 webserver.o: webserver.c webserver.h help.h
 
 clean: 
-	rm -f *.o test
+	rm -f *.o example

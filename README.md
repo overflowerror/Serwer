@@ -12,7 +12,7 @@ Because W for web... Get it? ... Well next time I'll ask you for a catchy name, 
 
 ### Is this ... thing ... even finished?
 No. There are many functions missing and the code needs some revision (and comments I suppose).
-There is a working mode though (see [the main file](main.c) for an example).
+There is a working mode though (see [example.c](example.c) for an example).
 
 If you want to help me with this project, feel free to fork and submit-pull requests. 
 I also appreciate opinions, suggestions and complaints.
@@ -22,7 +22,7 @@ Both, I guess. Although as I'm thinking about it, it might actually be more of a
 
 ### Okay...? So, how can I use this thing?
 
-See [the main file](main.c).
+See [exmaple.c](example.c).
 
 Basically you need at least one handler.
 ```c

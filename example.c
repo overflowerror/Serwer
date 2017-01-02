@@ -29,12 +29,12 @@ int main(int argc, char** argv) {
 	help_init(NULL, "test");
 	
 	handle_t hello_handle = {
-		.host = NULL,
+		.host = ANY,
 		.path = "/world",
 		.handler = &hello_world
 	};
 	handle_t test_handle = {
-		.host = NULL,
+		.host = ANY,
 		.path = "/test",
 		.handler = &test
 	};
@@ -45,7 +45,7 @@ int main(int argc, char** argv) {
 		.loglevel = LOG_DEBUG
 	};
 
-	webserver_t server = ws_create("test_server", NULL, "8080", stderr, options);
+	webserver_t server = ws_create("test_server", NULL , "8080", stderr, options);
 
 	ws_handle_add(&server, hello_handle);
 	ws_handle_add(&server, test_handle);
