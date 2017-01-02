@@ -3,13 +3,15 @@
 
 #include "ws_types.h"
 #include "ws_modes.h"
+#include "ws_utils.h"
+
 #include <stdio.h>
 #include <stdbool.h>
 
 #define BUFFER_SIZE 1024
 #define WS_HTTP_VERSION "HTTP/1.1"
 #define WS_VERSION "0.1"
-#define WS_NAME "SERWER"
+#define WS_NAME "Serwer"
 
 headers_t ws_headers_create(void);
 void ws_headers_add(headers_t*, const char*, const char*);

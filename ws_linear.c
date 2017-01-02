@@ -1,7 +1,4 @@
-#include "webserver.h"
-#include "ws_types.h"
-#include "ws_modes.h"
-#include "ws_utils.h"
+#include "serwer.h"
 
 #include <errno.h>
 #include <stdlib.h>

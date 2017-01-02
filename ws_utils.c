@@ -1,6 +1,4 @@
-#include "webserver.h"
-#include "ws_types.h"
-#include "ws_utils.h"
+#include "serwer.h"
 
 #include <assert.h>
 #include <string.h>
