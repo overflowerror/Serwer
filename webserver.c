@@ -25,7 +25,7 @@ bool ws_host_match(const char* host, const char* match) {
 	int wnext = -1;
 	int found = -1;
 
-	int h = 0, int = 0;
+	int h = 0, m = 0;
 	for (; m < lenm && h < lenh; m++, h++) {
 		if (match[m] == '*') {
 			wildcard = true;
