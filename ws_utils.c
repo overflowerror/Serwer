@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 method_t ws_method(const char* string) {
 	if 	(strcmp(string, "OPTIONS") == 0)

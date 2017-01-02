@@ -3,6 +3,8 @@
 
 #include "ws_types.h"
 
+#include <stdbool.h>
+
 method_t ws_method(const char*);
 const char* ws_method_string(method_t);
 const char* ws_code_reason(int);
