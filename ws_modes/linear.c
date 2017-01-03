@@ -1,4 +1,4 @@
-#include "serwer.h"
+#include "../serwer.h"
 
 #include <errno.h>
 #include <stdlib.h>
@@ -92,7 +92,7 @@ int ws_run_linear(webserver_t* server) {
 		
 					// find handler
 					ws_log(server, LOG_TESTING, "find handler");
-					handler_t handler = ws_handler_find(server, path, host);
+					handler_t* handler = ws_handler_find(server, path, host);
 
 					if (handler == NULL) {
 						// TODO 404	
@@ -131,7 +131,7 @@ int ws_run_linear(webserver_t* server) {
 
 					// handler
 					ws_log(server, LOG_DEBUG, "execute handler");
-					int code = (*handler)(method, host, path, headers, &responseHeaders, request, response);
+					int code = (*handler)(*server, method, host, path, headers, &responseHeaders, request, response);
 					ws_log(server, LOG_TESTING, "handler finished with %i", code);
 				
 					fclose(response);

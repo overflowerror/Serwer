@@ -1,26 +1,13 @@
 #include "serwer.h"
+#include "ws_handlers.h"
 #include "help.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-int hello_world(method_t method, const char* host, const char* path, headers_t requestHeaders, 
+int hello_world(webserver_t server, method_t method, const char* host, const char* path, headers_t requestHeaders, 
 			headers_t* responseHeaders, stream_t request, stream_t response) {
 
 	fprintf(response, "Hello World!\n");
-
-	return 200;
-}
-
-int test(method_t method, const char* host, const char* path, headers_t requestHeaders, 
-			headers_t* responseHeaders, stream_t request, stream_t response) {
-
-	fprintf(response, "Method: %s, URI: %s%s\n", ws_method_string(method), host, path);
-	fprintf(response, "Request headers:\n");
-	for (int i = 0; i < requestHeaders.nrfields; i++) {
-		header_t header = requestHeaders.fields[i];
-		fprintf(response, "  %s - %s\n", header.key, header.value);
-	}
-	fprintf(response, "\n");
 
 	return 200;
 }
@@ -35,8 +22,8 @@ int main(int argc, char** argv) {
 	};
 	handle_t test_handle = {
 		.host = ANY,
-		.path = "/test",
-		.handler = &test
+		.path = "/info",
+		.handler = &info_handler
 	};
 	srvoptions_t options = {
 		.mode = LINEAR,

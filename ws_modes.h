@@ -3,6 +3,6 @@
 
 #include "ws_types.h"
 
-int ws_run_linear(webserver_t*);
+srvhandler_t ws_run_linear;
 
 #endif

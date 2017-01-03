@@ -14,7 +14,7 @@
 #include <unistd.h>
 #include <time.h>
 
-handler_t ws_handler_find(webserver_t* server, const char* path, const char* host) {
+handler_t* ws_handler_find(webserver_t* server, const char* path, const char* host) {
 	for (int i = 0; i < server->nrhandles; i++) {
 		handle_t handle = server->handles[i];
 
@@ -217,6 +217,10 @@ void ws_simple_status(int connfd, int code) {
 int ws_run(webserver_t* server) {
 	ws_log(server, LOG_MESSAGE, "server \"%s\" started on %s:%s", server->name, 
 		server->host == NULL ? "0.0.0.0" : server->host, server->port);
+
+	time_t rawtime;
+	time(&rawtime);
+	server->started = localtime(&rawtime);
 
 	switch(server->options.mode) {
 	case LINEAR:
