@@ -15,7 +15,7 @@ int info_handler(webserver_t server, method_t method, const char* host, const ch
 	strftime(buffer, 26, "%Y.%m.%d %H:%M:%S", server.started);
 
 	fprintf(response, "<h2>Server Infos</h2>");
-	fprintf(response, "This server is running %s (%s Version %s) on %s:%s since %s.</br></br>", server.name, WS_NAME, WS_VERSION, server.host == NULL ? "8.8.8.8" : server.host, server.port, buffer);
+	fprintf(response, "This server is running %s (%s Version %s) on %s:%s since %s.</br></br>", server.name, WS_NAME, WS_VERSION, server.host == NULL ? "0.0.0.0" : server.host, server.port, buffer);
 	fprintf(response, "There are %i handles registered:<ul>", server.nrhandles);
 	for (int i = 0; i < server.nrhandles; i++) {
 		char* hhost = server.handles[i].host;
