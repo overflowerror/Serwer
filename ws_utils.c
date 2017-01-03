@@ -182,6 +182,9 @@ bool ws_host_match(const char* host, const char* match) {
 				return false;
 		}
 	}
+
+	// TODO server:80 and server:80* do not match.
+
 	// if not whole match string matches, return false
 	if (m != lenm)
 		return false;
@@ -238,6 +241,8 @@ bool ws_path_match(const char* path, const char* match) {
 				return false;
 		}
 	}
+
+	// TODO /hello and /hello* do not match.
 
 	// if not whole match string used, return false
 	if (m != lenm)

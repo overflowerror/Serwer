@@ -66,12 +66,10 @@ int ws_run_linear(webserver_t* server) {
 
 				// line end
 				if (buffersize == 1) {
-					// TODO 400
 					ws_simple_status(connfd, 400);
 					break;
 				}
 				if (buffer[buffersize - 2] != '\r') {
-					// TODO 400
 					ws_simple_status(connfd, 400);
 					break;
 				}
@@ -81,7 +79,6 @@ int ws_run_linear(webserver_t* server) {
 					ws_log(server, LOG_TESTING, "got last header line");
 
 					if (headerlines < 1) {
-						// TODO 400
 						ws_simple_status(connfd, 400);
 						break;
 					}
@@ -95,9 +92,8 @@ int ws_run_linear(webserver_t* server) {
 					handler_t* handler = ws_handler_find(server, path, host);
 
 					if (handler == NULL) {
-						// TODO 404	
 						ws_log(server, LOG_DEBUG, "handler not found");				
-						ws_simple_status(connfd, 404);
+						ws_simple_status(connfd, 404); // TODO add content
 						break;
 					}
 					ws_log(server, LOG_TESTING, "found");
@@ -170,8 +166,7 @@ int ws_run_linear(webserver_t* server) {
 					ws_log(server, LOG_TESTING, "parsing first line");
 					int e;
 					if ((e = ws_request_parse(header + headersize, &path, &method)) < 0) {
-						ws_log(server, LOG_DEBUG, "parsing error: %i", e);
-						// TODO 400						
+						ws_log(server, LOG_DEBUG, "parsing error: %i", e);				
 						ws_simple_status(connfd, 400);
 						break;
 					}
