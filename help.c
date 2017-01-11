@@ -14,6 +14,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <stdarg.h>
 
 /**
  * @see help.h
@@ -28,53 +29,49 @@ const char* progname = "";
 static free_t freeFunction = NULL;
 
 void help_init(free_t function, const char* name) {
-    freeFunction = function;
-    progname = name;
+	freeFunction = function;
+	progname = name;
 }
 
-void bail_out(int exitcode, const char* module) {
+void bail_out(int exitcode, const char* format, ...) {
+	(void) fprintf(stderr, "%s: ", progname);
 
-    if (module != NULL) {
-        // output is not split into smaller quantities to 
-        // ensure error messages of child and parent 
-        // don't get mixed
+	va_list arg;
+	va_start(arg, format);
+	(void) vfprintf(stderr, format, arg);
+	va_end(arg);
 
-        if (errno == 0) {
-            (void) fprintf(stderr, "%s: %s\n", progname, module);
-        } else {
-            (void) fprintf(stderr, "%s: %s: %s\n", progname, module, strerror(errno));
-        }
-    }
+	(void) fprintf(stderr, "\n");
 
-    if (freeFunction != NULL)
-        (*freeFunction)();
-    exit(exitcode);
+	if (freeFunction != NULL)
+		(*freeFunction)();
+	exit(exitcode);
 }
 
 void usage(const char* arguments, const char* description, const char* error, int exitcode) {
-    if (error != NULL) {
-        (void) fprintf(stderr, "%s\n\n", error);
-    }
-    (void) fprintf(stderr, "Usage: %s %s\n", progname, arguments);
-    if (description != NULL) {
-        (void) fprintf(stderr, "\n%s\n", description);
-    }
+	if (error != NULL) {
+		(void) fprintf(stderr, "%s\n\n", error);
+	}
+	(void) fprintf(stderr, "Usage: %s %s\n", progname, arguments);
+	if (description != NULL) {
+		(void) fprintf(stderr, "\n%s\n", description);
+	}
 
-    if (freeFunction != NULL)
-        (*freeFunction)();
+	if (freeFunction != NULL)
+		(*freeFunction)();
 
-    exit(exitcode);
+	exit(exitcode);
 }
 
 void setup_signal_handler(const int signal, sighandler_t handler) {
-    struct sigaction s;
+	struct sigaction s;
 
-    s.sa_handler = handler;
-    s.sa_flags   = 0;
-    if(sigfillset(&s.sa_mask) < 0) {
-        bail_out(EXIT_FAILURE, "sigfillset");
-    }
-    if (sigaction(signal, &s, NULL) < 0) {
-        bail_out(EXIT_FAILURE, "sigaction");
-    }
+	s.sa_handler = handler;
+	s.sa_flags   = 0;
+	if(sigfillset(&s.sa_mask) < 0) {
+		bail_out(EXIT_FAILURE, "sigfillset");
+	}
+	if (sigaction(signal, &s, NULL) < 0) {
+		bail_out(EXIT_FAILURE, "sigaction");
+	}
 }

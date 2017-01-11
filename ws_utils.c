@@ -1,9 +1,12 @@
 #include "serwer.h"
+#include "ws_error.h"
 
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <errno.h>
+
 
 method_t ws_method(const char* string) {
 	if 	(strcmp(string, "OPTIONS") == 0)
@@ -316,6 +319,11 @@ char* ws_host_find(const char** path, headers_t headers) {
 		header_t header = headers.fields[i];
 		if (strcmp(header.key, "Host") == 0) {
 			host =  malloc(strlen(header.value) + 1);
+			if (host == NULL) {
+				ws_error.type = ERRNO;
+				ws_error.no = errno;
+				return NULL;
+			}
 			memcpy(host, header.value, strlen(header.value) + 1);
 			return host;
 		}	
@@ -331,6 +339,11 @@ char* ws_host_find(const char** path, headers_t headers) {
 	if (host == NULL) {
 		setHost = true;
 		host = malloc(strlen(*path) + 1);
+		if (host == NULL) {
+			ws_error.type = ERRNO;
+			ws_error.no = errno;
+			return NULL;
+		}
 	}
 	int hposition = 0;
 
@@ -360,6 +373,11 @@ char* ws_host_find(const char** path, headers_t headers) {
 	if (setHost) {
 		host[hposition] = '\0';
 		host = realloc(host, strlen(host) + 1);
+		if (host == NULL) {
+			ws_error.type = ERRNO;
+			ws_error.no = errno;
+			return NULL;
+		}
 	}
 
 	return host;

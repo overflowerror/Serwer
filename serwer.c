@@ -1,6 +1,7 @@
 #include "serwer.h"
 #include "ws_types.h"
 #include "ws_utils.h"
+#include "ws_error.h"
 #include "ws_modes.h"
 #include "help.h"
 
@@ -33,18 +34,26 @@ handler_t* ws_handler_find(webserver_t* server, const char* path, const char* ho
 
 headers_t ws_headers_create(void) {
 	headers_t headers;
-	headers.fields = malloc(0 * sizeof(header_t));
+	headers.fields = NULL;
 	headers.nrfields = 0;
 	return headers;
 }
 
-void ws_headers_add(headers_t* headers, const char* key, const char* value) {
-	headers->fields = realloc(headers->fields, ++(headers->nrfields) * sizeof(header_t));
+int ws_headers_add(headers_t* headers, const char* key, const char* value) {
+	header_t* array = realloc(headers->fields, ++(headers->nrfields) * sizeof(header_t));
+	if (array == NULL) {
+		free(headers->fields);
+		ws_error.type = ERRNO;
+		ws_error.no = errno;
+		return -1;
+	}
+	headers->fields = array;
 	headers->fields[headers->nrfields - 1].key = key;
 	headers->fields[headers->nrfields - 1].value = value;
+	return 0;
 }
 
-void ws_headers_convert(headers_t* headers, char* line) {
+int ws_headers_convert(headers_t* headers, char* line) {
 	const char* key = line;
 	const char* value = NULL;
 	bool foundSeperator = false;
@@ -69,7 +78,9 @@ void ws_headers_convert(headers_t* headers, char* line) {
 	}
 
 	if (value != NULL)
-		ws_headers_add(headers, key, value);
+		if (ws_headers_add(headers, key, value) < 0)
+			return -1;
+	return 0;
 }
 
 void ws_headers_free(headers_t* headers) {
@@ -90,8 +101,9 @@ int ws_listen(webserver_t* server) {
 
 	s = getaddrinfo(server->host, server->port, &hints, &result);
 	if (s != 0) {
-		fprintf(stderr, "%s: ws_bind: getaddrinfo: %s\n", progname, gai_strerror(s));
-		bail_out(EXIT_FAILURE, NULL);
+		ws_error.type = GAI;
+		ws_error.no = s;
+		return -1;
 	}
 
 	for (rp = result; rp != NULL; rp = rp->ai_next) {
@@ -117,9 +129,17 @@ int ws_listen(webserver_t* server) {
 	return 0;
 }
 
-void ws_handle_add(webserver_t* server, handle_t handle) {
-	server->handles = realloc(server->handles, ++(server->nrhandles) * sizeof(handle_t));
+int ws_handle_add(webserver_t* server, handle_t handle) {
+	handle_t* tmp = realloc(server->handles, ++(server->nrhandles) * sizeof(handle_t));
+	if (tmp == NULL) {
+		free(server->handles);
+		ws_error.type = ERRNO;
+		ws_error.no = errno;
+		return -1;
+	}
+	server->handles = tmp;
 	server->handles[server->nrhandles - 1] = handle;
+	return 0;
 }
 
 webserver_t ws_create(const char* name, const char* host, const char* port, FILE* logfile, srvoptions_t options) {
@@ -129,7 +149,7 @@ webserver_t ws_create(const char* name, const char* host, const char* port, FILE
 	server.port = port;
 	server.logfile = logfile;
 	server.nrhandles = 0;
-	server.handles = malloc(0);
+	server.handles = NULL;
 	server.options.mode = LINEAR;
 	server.options.timeout = 30;
 

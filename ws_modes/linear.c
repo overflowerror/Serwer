@@ -1,4 +1,5 @@
 #include "../serwer.h"
+#include "../ws_error.h"
 
 #include <errno.h>
 #include <stdlib.h>
@@ -17,10 +18,23 @@ int ws_run_linear(webserver_t* server) {
 	int connfd;
 
 	char* buffer = malloc(BUFFER_SIZE * sizeof(char));
+	if (buffer == NULL) {
+		ws_error.type = ERRNO;
+		ws_error.no = errno;
+		return -1;
+	}
+
 	int buffersize = 0;
 	int nb = 1;
 
 	char* header = malloc(BUFFER_SIZE * sizeof(char));
+	if (header == NULL) {
+		free(buffer);
+		ws_error.type = ERRNO;
+		ws_error.no = errno;
+		return -1;
+	}
+
 	int headersize = 0;
 	int nhb = 1;
 
@@ -56,7 +70,15 @@ int ws_run_linear(webserver_t* server) {
 
 			if (buffersize > nb * BUFFER_SIZE - 1) {
 				nb++;
-				buffer = realloc(buffer, nb * BUFFER_SIZE * sizeof(char));
+				char* tmp = realloc(buffer, nb * BUFFER_SIZE * sizeof(char));
+				if (tmp == NULL) {
+					free(buffer);
+					free(header);
+					ws_error.type = ERRNO;
+					ws_error.no = errno;
+					return -1;
+				}
+				buffer = tmp;
 			}
 
 			buffer[buffersize] = '\0';
@@ -155,7 +177,15 @@ int ws_run_linear(webserver_t* server) {
 				ws_log(server, LOG_TESTING, "enlarging header buffer");
 				while (headersize + buffersize + 1 > nhb * BUFFER_SIZE) {
 					nhb++;
-					header = realloc(header, nhb * BUFFER_SIZE * sizeof(char));
+					char* tmp = realloc(header, nhb * BUFFER_SIZE * sizeof(char));
+					if (tmp == NULL) {
+						free(header);
+						free(buffer);
+						ws_error.type = ERRNO;
+						ws_error.no = errno;
+						return -1;
+					}
+					header = tmp;
 				}
 
 				memcpy(header + headersize, buffer, buffersize + 1);
@@ -181,13 +211,30 @@ int ws_run_linear(webserver_t* server) {
 				headersize += buffersize + 1;
 
 				ws_log(server, LOG_TESTING, "reset buffer");
-				buffer = realloc(buffer, BUFFER_SIZE * sizeof(char));
+				char* tmp = realloc(buffer, BUFFER_SIZE * sizeof(char));
+				if (tmp == NULL) {
+					free(header);
+					free(buffer);
+					ws_error.type = ERRNO;
+					ws_error.no = errno;
+					return -1;
+				}
+				buffer = tmp;
 				nb = 1;
 				buffersize = 0;
 			}
 		}
 
-		header = realloc(header, BUFFER_SIZE * sizeof(char));
+		char* tmp = realloc(header, BUFFER_SIZE * sizeof(char));
+		if (tmp == NULL) {
+			free(header);
+			free(buffer);
+			ws_error.type = ERRNO;
+			ws_error.no = errno;
+			return -1;
+		}
+		header = tmp;
+
 		nhb = 1;
 		headersize = 0;
 
@@ -200,11 +247,22 @@ int ws_run_linear(webserver_t* server) {
 			host = NULL;		
 		}
 
-		buffer = realloc(buffer, BUFFER_SIZE * sizeof(char));
+		tmp = realloc(buffer, BUFFER_SIZE * sizeof(char));
+		if (tmp == NULL) {
+			free(header);
+			free(buffer);
+			ws_error.type = ERRNO;
+			ws_error.no = errno;
+			return -1;
+		}
+		buffer = tmp;
+
 		nb = 1;
 		buffersize = 0;
 	}
 
 	free(buffer);
 	free(header);
+
+	return 0;
 }

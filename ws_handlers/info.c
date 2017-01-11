@@ -6,6 +6,9 @@
 int info_handler(webserver_t server, method_t method, const char* host, const char* path, headers_t requestHeaders, 
 			headers_t* responseHeaders, stream_t request, stream_t response) {
 
+	(void) responseHeaders;
+	(void) request;
+
 	fprintf(response, "<!DOCTYPE html>\n");
 	fprintf(response, "<html></head><title>Test-Page</title><style>* { font-family: Arial; }</style></head><body style=\"margin: 0px; padding: 0px; background-color: #fee\">");
 	fprintf(response, "<div style=\"background-color: #eee; margin: 0 auto; height: 100%%; width: 60%%; border-left: 3px solid black; border-right: 1px solid grey; padding: 10px;\">");
@@ -18,8 +21,8 @@ int info_handler(webserver_t server, method_t method, const char* host, const ch
 	fprintf(response, "This server is running %s (%s Version %s) on %s:%s since %s.</br></br>", server.name, WS_NAME, WS_VERSION, server.host == NULL ? "0.0.0.0" : server.host, server.port, buffer);
 	fprintf(response, "There are %i handles registered:<ul>", server.nrhandles);
 	for (int i = 0; i < server.nrhandles; i++) {
-		char* hhost = server.handles[i].host;
-		char* hpath = server.handles[i].path;
+		const char* hhost = server.handles[i].host;
+		const char* hpath = server.handles[i].path;
 		fprintf(response, "<li>%s %s</li>", hhost == NULL ? "(null)" : hhost, hpath = NULL ? "(null)" : hpath);
 	}
 	fprintf(response, "</ul>");

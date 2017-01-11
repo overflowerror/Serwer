@@ -58,7 +58,7 @@ void help_init(free_t, const char*);
  * prints strerror() (if errno is not 0), executes the free-function (if set), 
  * and exits the program with the given exit code.
  */
-void bail_out(int, const char*);
+void bail_out(int, const char*, ...);
 
 /**
  * @brief displays a usage message

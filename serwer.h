@@ -21,11 +21,11 @@
 #define LOG_ERROR 0
 
 headers_t ws_headers_create(void);
-void ws_headers_add(headers_t*, const char*, const char*);
-void ws_headers_convert(headers_t*, char*);
+int ws_headers_add(headers_t*, const char*, const char*);
+int ws_headers_convert(headers_t*, char*);
 void ws_headers_free(headers_t*);
 
-void ws_handle_add(webserver_t*, handle_t);
+int ws_handle_add(webserver_t*, handle_t);
 handler_t* ws_handler_find(webserver_t*, const char*, const char*);
 
 size_t ws_send(int, int, headers_t, int);
